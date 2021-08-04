@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load cart %}
+{% load custom_filter %}
+
+
+<div class="container">
+   <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4" style="font-family: 'Times New Roman', Times, serif;">Your Cart</p>
+        <hr>
+        <table class="table" style="color: white;" >
+           <thead>
+               <tr>
+                   <th>Sno.</th>
+                   <th>Image</th>
+                   <th>Product</th>
+                   <th>Price</th>
+                   <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantity</th>
+                   <th>Total</th>
+
+               </tr>
+           </thead>
+           <tbody>
+
+                {% for product in products %}
+               <tr>
+                   <td>{{forloop.counter}}</td>
+                   <td><img style="height: 70px;" class="rounded-circle" 
+                    src="{{product.image.url}}" alt=""></td>
+                   <td>{{product.name}}</td>
+                   <td>{{product.price|currency}}</td>
+                   <!--<td>{{product|cart_quantity:request.session.cart}}</td>-->
+
+                   {% if product|is_in_cart:request.session.cart %}
+                  <td><div class="row no-gutters">
+
+                    <form action="/cart" class="col-2" method="post">
+                      {% csrf_token %}
+                      <input hidden type="text" name='product'
+                      value="{{product.id}}">
+                      <input hidden type="text" name='remove'
+                      value="True">
+                      <input type="submit" value=" - " class="btn btn-block btn-secondary">
+                    </form>
+                    <div class="col-3">{{product|cart_quantity:request.session.cart}} in cart</div>
+                    <form action="/cart" class="col-1" method="post">
+                      {% csrf_token %}
+                      <input hidden type="text" name='product'
+                      value="{{product.id}}">
+                      <input type="submit" value=" + " class="btn btn-block btn-secondary">
+                    </form>
+                  </div></td>
+                   {% endif %}
+
+
+
+                    <td>{{product|price_total:request.session.cart|currency}}</td>
+               </tr>
+               {% endfor %}
+               
+           </tbody>
+           <tfoot>
+               <tr>
+                   <th colspan="4"></th>
+                   <th class="" colspan="">Total : </th>
+
+                   <th>{{products|total_cart_price:request.session.cart|currency}}</th>
+               </tr>
+           </tfoot>
+       </table>
+       <hr>
+       <div class="m-3 p-3">
+           <a href="#" style="color: aliceblue;" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+           class="btn btn-outline-info border rounded col-lg-3 float-right">
+           Checkout</a>
+       </div>
+
+   </div>
+</div>
+
+  
+  <!-- Modal -->
+  
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 style="color: black;" class="modal-title" id="exampleModalLabel">Checkout</h5>
+          <hr>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <div class="m-2 p-2">
+                <form action="/check-out" method="POST">
+                    {% csrf_token %}
+
+
+                    <div style="color: black;" class="form-group mt-3">
+                        <label for="">Name</label>
+                        <input type="text" name="name" id="" class="form-control mt-2" 
+                          placeholder="" aria-describedby="helpId">
+                      </div>
+
+
+                    <div style="color: black;" class="form-group mt-3">
+                      <label for="">Address</label>
+                      <input type="text" name="address" id="" class="form-control mt-2" 
+                        placeholder="" aria-describedby="helpId">
+                    </div>
+
+                    <div style="color: black;" class="form-group mt-3">
+                        <label for="">Phone</label>
+                        <input type="text" minlength="10" maxlength="10"  name="phone" id="" class="form-control mt-2" 
+                          placeholder="" aria-describedby="helpId" pattern="[0-9]+" required>
+                      </div>
+
+                      <button type="submit" class=" btn btn-primary mt-3">Checkout</button>
+
+                
+                </form>
+
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+{% endblock %}

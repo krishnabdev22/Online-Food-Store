@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>FoodNotes Restaurant</title>
+  </head>
+   
+
+  
+    <body style="background-color:black; color: white;">
+    <!--NavBar-->
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+<!--        <nav class="navbar navbar-light bg-light">-->
+<!--            <div class="container">-->
+<!--              <a class="navbar-brand" href="#">-->
+<!--                <img src="https://ibb.co/dtk1V6r" alt="" width="90" height="24">-->
+<!--              </a>-->
+<!--            </div>-->
+<!--          </nav>-->
+
+        
+       <img 
+                src="https://www.linkpicture.com/q/logo-png_1.png" href ="" alt=""
+                class=" "style="height: 50px; width: 250;">
+              
+
+
+
+        <!-- <a class="navbar-brand" href="#">FoodNotes</a> -->
+        <button class="navbar-toggler" type="button" 
+        data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+        aria-controls="navbarSupportedContent" aria-expanded="false" 
+        aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/">Store</a>
+            </li>
+            {% if request.session.customer %}
+            
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/" >
+                Hello,&nbsp;<b>{{username}}</b>
+              </a>
+            </li>
+            {% endif %}
+  
+          </ul>
+          
+        
+
+
+          <ul class="navbar-nav my-2 my-lg-0">
+
+            {% if request.session.customer %}
+            
+             <!-- Thankyou Button -->
+             
+             <!-- {% if messages %}
+                {% for message in messages %}
+                
+                  <li class="nav-item">
+                    <a class="nav-link " data-bs-toggle="modal" data-bs-target="#myModal" aria-current="page" href="#"> <li class="nav-item"><h7 style="color: black;">{{message}}</h7></li>Feedback </a>
+                  </li>
+                {% endfor %}
+              {% else %} -->
+                <a class="nav-link " data-bs-toggle="modal" data-bs-target="#myModal" aria-current="page" href="#">Feedback </a>
+              <!-- {% endif %} -->
+
+              <!-- End Thankyou -->
+
+
+
+
+            <!-- Modal -->  
+            <form method="POST" action="/feed" >
+              {% csrf_token %}
+
+            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" style="color: black;" id="exampleModalLabel">Feedback</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+
+                    <div style="color: black;" class="form-group mt-3">
+                      <label for="">Name</label>
+                      <input required type="text" name="name" id="" class="form-control mt-2" 
+                        placeholder="" value="{{username}}" aria-describedby="helpId">
+                    </div>
+
+
+                  <div style="color: black;" class="form-group mt-3">
+                    <label for="">email</label>
+                    <input required type="email" name="email" id="" class="form-control mt-2" 
+                      placeholder="example@email.com" aria-describedby="helpId">
+                  </div>
+
+                  <div style="color: black;" class="form-group mt-3">
+                      <label for="">Message</label>
+                      <textarea rows="7" required type="text" name="feed" id="" class="form-control mt-2" 
+                        placeholder="Please enter your valuable feedback" aria-describedby="helpId"></textarea>
+                    </div>
+                  
+                    ...
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                    <button type="submit" class="btn btn-primary" >Sent Feedback</button>
+                    
+                  
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+            </form>
+            
+
+
+
+            <!-- CloseModel -->
+
+
+
+
+
+            
+            
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/cart">Cart
+              <span style="background-color: cadetblue;" class="badge badge-info">
+                {{request.session.cart.keys|length}}</span>
+              
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/orders">Orders</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/logout">Logout</a>
+            </li>
+            
+            {% else %}  
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/signup">SignIn</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " aria-current="page" href="/login">Login</a>
+            </li>
+          {% endif %}
+            
+            <!--Profile-->
+            <!--
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Profile
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            -->
+
+            
+            
+          </ul>
+
+
+          
+        </div>
+      </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+  
+  
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    
+
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+  
+  </body>
+</html>
+

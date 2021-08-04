@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container">
+    <div class="p-4 m-4">
+
+
+        <div class="col-lg-5 mx-auto border rounded  pb-4">
+            <div class="text-center col">
+            <img 
+                src="https://www.linkpicture.com/q/logo-png_1.png" type="image" alt=""
+                class=" " style="height: 150px; width: 350;">
+            </div>
+
+
+            <h3 class="alert alert-light border rounded">Verify OTP</h3>
+            <form method="POST">
+              
+                {% csrf_token %}
+                    
+                {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <!--password-->
+                <div class="form-group mt-3">
+                    <label for="">OTP</label>
+                    <input type="password" 
+                    name="userentry" id=""
+                    class="form-control form-control-sm" 
+                    placeholder="******">
+                </div>
+
+                    <div class="form-group mt-3">
+                        <input class="btn btn-sm btn-info col-lg-4"
+                         type="submit" value="Verify">
+                    </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

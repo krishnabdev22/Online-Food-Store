@@ -1,0 +1,180 @@
+{% extends 'base.html' %}   
+
+
+
+
+   <!--Body-->
+
+  {% block content %} 
+
+{% load cart %}
+{% load static %}
+{% load custom_filter %}
+<head>
+  <style>
+    .alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+
+
+
+
+  </style>
+ 
+  <script>
+    var close = document.getElementsByClassName("closebtn");
+    var i;
+    
+    for (i = 0; i < close.length; i++) {
+      close[i].onclick = function(){
+        var div = this.parentElement;
+        div.style.opacity = "0";
+        setTimeout(function(){ div.style.display = "none"; }, 600);
+      }
+    }
+
+
+
+    </script>
+</head>
+
+
+
+  <div class="container-fluid mt-3">
+
+
+              
+                {% for message in messages %}
+
+                <div class="alert success">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>  
+                  <strong>{{message}}</strong> 
+                </div>
+
+                <!-- <div class="alert alert-success alert-dismissible fade show">
+                  <button type="button" data-dismiss="alert">&times;</button>
+                  <strong>{{message}}</strong> 
+                </div> -->
+              
+                
+                  
+                {% endfor %}
+
+
+                <!-- Slider -->
+
+
+
+                
+                <!-- After Slider -->
+
+    <div class="row">
+
+      <!--Filter-->
+      <div class='col-lg-2 mx-auto'>
+        <div class="list-group">
+          <a href="/" class="list-group-item 
+          list-group-item-action">All</a>
+          {% for category in categories %}
+          <a href="/?category={{category.id}}" class="list-group-item 
+          list-group-item-action">{{category.name}}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+
+      <!--All Products-->
+
+      <div id='products' class="col-lg-10 mx-auto">
+        <div class="row mx-auto mt-3">
+
+          {% for product in products %}
+        
+            <div class="card mx-auto mb-3" id="{{product.id}}" style="width: 18rem;background-color: black;">
+              <img src="{{product.image.url}}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <p class="card-title">{{product.name}}</p>
+                <p class="card-text">{{product.description}}</p>
+                <p class="card-text"><b>{{product.price|currency}}</b></p>
+                
+                <!-- {{ product | is_in_cart:request.session.cart }} -->
+                
+
+
+
+              </div>
+              
+              <div class="card-footer p-0 no-gutters">
+                
+                {% if product|is_in_cart:request.session.cart %}
+                <div class="row no-gutters">
+                  <form action="/#{{product.id}}" class="col-2" method="post">
+                    {% csrf_token %}
+                    <input hidden type="text" name='product' 
+                    value="{{product.id}}">
+                    <input hidden type="text" name='remove' 
+                    value="True">
+                    <input type="submit" value=" - " class="btn btn-block btn-secondary">
+                  </form>
+                  <div class="text-center col">{{product|cart_quantity:request.session.cart}} in cart</div>
+                  <form action="/#{{product.id}}" class="col-2" method="post">
+                    {% csrf_token %}
+                    <input hidden type="text" name='product' 
+                    value="{{product.id}}">
+                    <input type="submit" value=" + " class="btn btn-block btn-secondary">
+                  </form>
+                </div>
+
+                {% else %}
+                <form action="/#{{product.id}}" method="POST" class="btn-block">
+                  {% csrf_token %}
+                  <input hidden type="text" name='product' value="{{product.id}}">
+                <input type="submit" class="btn btn-primary border  form-control" 
+                value = "Add to Cart">
+  
+                </form>
+                {% endif %}
+  
+  
+                
+              </div>
+
+              
+            </div>     
+            
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+  </div> 
+
+
+  {% endblock %}
+  
+
